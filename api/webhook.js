@@ -75,7 +75,7 @@ bot.on(message('text'), async (ctx) => {
         let jsessionid = cookie.match(/JSESSIONID=(.*?);/)[1];
 
         await ctx.replyWithPhoto(Input.fromReadableStream(response.body), {
-            caption: `<a href="https://t.me/PartitaIvaBot?start=${piva}/${jsessionid}">ㅤ</a>Risolvi il captcha rispondendo a questo messaggio.`,
+            caption: `🔍 Risolvi il captcha rispondendo a questo messaggio.<a href="https://t.me/PartitaIvaBot?start=${piva}/${jsessionid}">ㅤ</a>`,
             parse_mode: 'HTML',
             ...Markup.forceReply()
         });
