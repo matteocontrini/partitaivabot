@@ -27,7 +27,7 @@ bot.on(message('text'), async (ctx) => {
         });
 
         if (!response.ok) {
-            await ctx.reply('Errore');
+            await ctx.reply('Errore', Markup.removeKeyboard());
             return;
         }
 
@@ -42,7 +42,7 @@ bot.on(message('text'), async (ctx) => {
             for (let item of $('li', errorContainer)) {
                 text += '- ' + $(item).text().trim() + '\n';
             }
-            await ctx.reply(text);
+            await ctx.reply(text, Markup.removeKeyboard());
             return;
         }
 
@@ -55,7 +55,7 @@ bot.on(message('text'), async (ctx) => {
             }
         }
 
-        await ctx.reply(text);
+        await ctx.reply(text, Markup.removeKeyboard());
     } else {
         let piva = ctx.message.text.trim();
 
