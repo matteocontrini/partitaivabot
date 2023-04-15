@@ -12,6 +12,7 @@ bot.on(message('text'), async (ctx) => {
     if (ctx.message.reply_to_message) {
         let piva = ctx.message.reply_to_message.caption.match(/^piva=(.+)$/m)[1];
         let jsessionid = ctx.message.reply_to_message.caption.match(/^session=(.+)$/m)[1];
+        let captcha = ctx.message.text.trim().toLowerCase();
 
         let url = 'https://telematici.agenziaentrate.gov.it/VerificaPIVA/VerificaPiva.do';
         let response = await fetch(url, {
@@ -20,7 +21,7 @@ bot.on(message('text'), async (ctx) => {
                 'Cookie': `JSESSIONID=${jsessionid}`,
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-            body: `piva=${piva}&inCaptchaChars=${ctx.message.text}`
+            body: `piva=${piva}&inCaptchaChars=${captcha}`
         });
 
         if (!response.ok) {
