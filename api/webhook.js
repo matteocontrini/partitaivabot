@@ -10,12 +10,14 @@ const bot = new Telegraf(process.env.BOT_TOKEN);
 bot.on(message('text'), async (ctx) => {
     console.log(ctx.message);
     if (ctx.message.reply_to_message) {
-        let piva = ctx.message.reply_to_message.caption.match(/^piva=(.+)$/m)[1];
-        let jsessionid = ctx.message.reply_to_message.caption.match(/^session=(.+)$/m)[1];
-        let captcha = ctx.message.text.trim().toLowerCase();
+        const hiddenUrl = ctx.message.reply_to_message.caption_entities[0].url;
+        const [piva, jsessionid] = hiddenUrl.match(/\?start=(.+?)\/(.+)$/).slice(1);
+        const captcha = ctx.message.text.trim().toLowerCase();
 
-        let url = 'https://telematici.agenziaentrate.gov.it/VerificaPIVA/VerificaPiva.do';
-        let response = await fetch(url, {
+        console.log(`Checking PIVA '${piva}' with captcha '${captcha}' and JSESSIONID '${jsessionid}'`);
+
+        const url = 'https://telematici.agenziaentrate.gov.it/VerificaPIVA/VerificaPiva.do';
+        const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Cookie': `JSESSIONID=${jsessionid}`,
@@ -73,7 +75,8 @@ bot.on(message('text'), async (ctx) => {
         let jsessionid = cookie.match(/JSESSIONID=(.*?);/)[1];
 
         await ctx.replyWithPhoto(Input.fromReadableStream(response.body), {
-            caption: `Risolvi il captcha rispondendo a questo messaggio.\n\npiva=${piva}\nsession=${jsessionid}`,
+            caption: `<a href="https://t.me/PartitaIvaBot?start=${piva}/${jsessionid}">ㅤ</a>Risolvi il captcha rispondendo a questo messaggio.`,
+            parse_mode: 'HTML',
             ...Markup.forceReply()
         });
     }
