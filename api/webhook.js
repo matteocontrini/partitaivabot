@@ -3,8 +3,8 @@ import {message} from 'telegraf/filters';
 import * as cheerio from 'cheerio';
 import fetch from 'node-fetch';
 import convertBody from 'fetch-charset-detection';
+import process from 'node:process';
 
-// noinspection JSUnresolvedReference
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
 bot.on(message('text'), async (ctx) => {
@@ -61,7 +61,7 @@ bot.on(message('text'), async (ctx) => {
         }
 
         if (!piva.match(/^[0-9]{11}$/)) {
-            await ctx.reply('La partita IVA non è valida: deve essere di 11 cifre numeriche, opzionalmente con `IT` all\'inizio.');
+            await ctx.reply('La partita IVA non è valida: deve essere di 11 cifre numeriche, opzionalmente con IT all\'inizio.');
             return;
         }
 
@@ -77,6 +77,10 @@ bot.on(message('text'), async (ctx) => {
         });
     }
 });
+
+if (process.env.NODE_ENV === 'development') {
+    await bot.launch();
+}
 
 export default async function handler(request, response) {
     await bot.handleUpdate(request.body);
