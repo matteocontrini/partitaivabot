@@ -87,6 +87,16 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 export default async function handler(request, response) {
+    if (request.method !== 'POST') {
+        response.status(405).end();
+        return;
+    }
+
+    if (request.headers['x-telegram-bot-api-secret-token'] !== process.env.SECRET_TOKEN) {
+        response.status(403).end();
+        return;
+    }
+
     await bot.handleUpdate(request.body);
     response.status(200).end();
 }
