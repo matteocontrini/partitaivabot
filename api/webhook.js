@@ -64,7 +64,7 @@ bot.on(message('text'), async (ctx) => {
         }
 
         if (!piva.match(/^[0-9]{11}$/)) {
-            await ctx.reply('La partita IVA non è valida: deve essere di 11 cifre numeriche, opzionalmente con IT all\'inizio.');
+            await ctx.reply('Inserisci una partita IVA valida: deve essere di 11 cifre numeriche, opzionalmente con IT all\'inizio.');
             return;
         }
 
